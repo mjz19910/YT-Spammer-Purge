@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+# cspell:words repostedCommentsDict ThioJoe
 # -*- coding: UTF-8 -*-
 #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~#
 #######################################################################################################
@@ -102,8 +103,8 @@ def main():
 
   # Checks system platform to set correct console clear command
   # Clears console otherwise the windows terminal doesn't work with colorama for some reason  
-  clear_command = "cls" if platform.system() == "Windows" else "clear"
-  os.system(clear_command)
+  # clear_command = "cls" if platform.system() == "Windows" else "clear"
+  # os.system(clear_command)
 
   print("\nLoading YT Spammer Purge @ " + str(version) + "...")
 
@@ -188,10 +189,10 @@ def main():
   spamListDict['Meta']['VersionInfo']['LastChecked'] = versionInfo['LastChecked']
 
   # Check for primary config file, load into dictionary 'config'. If no config found, loads data from default config in assets folder
-  os.system(clear_command)
+  # os.system(clear_command)
   config = files.load_config_file(configVersion)
   validation.validate_config_settings(config)
-  os.system(clear_command)
+  # os.system(clear_command)
 
   # Disable colors before they are used anywhere
   if config['colors_enabled'] == False:
@@ -281,7 +282,7 @@ def main():
   else:
     moderator_mode = False
 
-  os.system(clear_command)
+  # os.system(clear_command)
 
 
 
@@ -296,6 +297,12 @@ def main():
   print("      but scanning your entire channel must be limited and might miss older spam comments.")
   print("You will be shown the comments to confirm before they are deleted.")
 
+  has_yes_arg=False
+  yes_arg_str=None
+  if(len(sys.argv) > 1 and sys.argv[1] == "-y"):
+    has_yes_arg=True
+    yes_arg_str=sys.argv[2]
+
   # While loop until user confirms they are logged into the correct account
   confirmedCorrectLogin = False
   while confirmedCorrectLogin == False:
@@ -304,12 +311,15 @@ def main():
     CURRENTUSER = User(id=userInfo[0], name=userInfo[1], configMatch=userInfo[2]) # Returns [channelID, channelTitle, configmatch]
     auth.CURRENTUSER = CURRENTUSER
     print("\n    >  Currently logged in user: " + f"{F.LIGHTGREEN_EX}" + str(CURRENTUSER.name) + f"{S.R} (Channel ID: {F.LIGHTGREEN_EX}" + str(CURRENTUSER.id) + f"{S.R} )")
-    if choice("       Continue as this user?", CURRENTUSER.configMatch) == True:
+    if has_yes_arg:
+      from time import sleep
+      sleep(2)
+    if (has_yes_arg and yes_arg_str == str(CURRENTUSER.name)) or choice("       Continue as this user?", CURRENTUSER.configMatch) == True:
       confirmedCorrectLogin = True
-      os.system(clear_command)
+      # os.system(clear_command)
     else:
       auth.remove_token()
-      os.system(clear_command)
+      # os.system(clear_command)
       YOUTUBE = auth.get_authenticated_service()
 
   # Declare Classes
@@ -361,6 +371,7 @@ def main():
       errorOccurred = False,
       )
 
+    # spell:words recentPostsListofDicts
     # Declare Default Variables
     maxScanNumber = 999999999
     scanVideoID = None
@@ -370,7 +381,7 @@ def main():
     loggingEnabled = False
     userNotChannelOwner = False
 
-    os.system(clear_command)
+    # os.system(clear_command)
 
     # -----------------------------------------------------------------------------------------------------------------------------
     if updateAvailable != False:
@@ -421,7 +432,7 @@ def main():
       if validConfigSetting == True and config and config['scan_mode'] != 'ask':
         scanMode = config['scan_mode']
       else:
-        scanMode = input("Choice (1-9): ")
+        scanMode = input("Enter choice: ")
       if scanMode.lower() == "q":
         sys.exit()
 
@@ -751,6 +762,7 @@ def main():
 
 # ================================================================================ COMMUNITY POST =====================================================================================================
 
+    # spell:words janky
     elif scanMode == 'communityPost':
       print(f"\nNOTES: This mode is {F.YELLOW}experimental{S.R}, and not as polished as other features. Expect some janky-ness.")
       print("   > It is also much slower to retrieve comments, because it does not use the API")
@@ -897,7 +909,7 @@ def main():
       input("\nPress Enter to return to main menu...")
       return True
 
-    # Recove deleted comments mode
+    # Recover deleted comments mode
     elif scanMode == "recoverMode":
       result = modes.recover_deleted_comments(config)
 
@@ -1144,6 +1156,7 @@ def main():
         dupeCheckModes = utils.string_to_list(config['duplicate_check_modes'])
         if filtersDict['filterMode'].lower() in dupeCheckModes:
           operations.check_duplicates(current, config, miscData, authorKeyAllCommentsDict, communityPostID)
+        # spell:words repostCheckModes check_reposts
         # repostCheckModes = utils.string_to_list(config['stolen_comments_check_modes'])
         # if filtersDict['filterMode'].lower() in repostCheckModes:
         #   operations.check_reposts(current, config, miscData, allCommunityCommentsDict, communityPostID)
@@ -1257,6 +1270,7 @@ def main():
     if current.duplicateCommentsDict:
       print(f"\nNumber of {S.BRIGHT}{F.LIGHTBLUE_EX}Non-Matched But Duplicate{S.R} Comments Found: {S.BRIGHT}{F.WHITE}{B.BLUE} {str(len(current.duplicateCommentsDict))} {F.R}{B.R}{S.R}")
     if current.repostedCommentsDict:
+      # spell:words reposted
       print(f"\nNumber of {S.BRIGHT}{F.LIGHTBLUE_EX}Non-Matched But Stolen & Reposted{S.R} Comments Found: {S.BRIGHT}{F.WHITE}{B.BLUE} {str(len(current.repostedCommentsDict))} {F.R}{B.R}{S.R}")
 
     # If spam comments were found, continue
@@ -1694,14 +1708,13 @@ if __name__ == "__main__":
     print("------------------------------------------------")
     print("Error Message: " + str(ux))
     if "referenced before assignment" in str(ux):
+      # spell:disable-next-line
       print(f"\n{F.LIGHTRED_EX}Error - Code: X-2{S.R} occurred. This is almost definitely {F.YELLOW}my fault and requires patching{S.R} (big bruh moment)")
       print(f"Please post a bug report on the GitHub issues page, and include the above error info.")
       print(f"Short Link: {F.YELLOW}TJoe.io/bug-report{S.R}")
       print("    (In the mean time, try using a previous release of the program.)")
       input("\n Press Enter to Exit...")
     else:
-      traceback.print_exc()
-      print("------------------------------------------------")
       print(f"\n{F.LIGHTRED_EX}Unknown Error - Code: Z-2{S.R} occurred. If this keeps happening,")
       print("consider posting a bug report on the GitHub issues page, and include the above error info.")
       print(f"Short Link: {F.YELLOW}TJoe.io/bug-report{S.R}")
