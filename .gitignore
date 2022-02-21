@@ -135,3 +135,11 @@ SpamPurgeConfig.ini
 # Ignore Resources Folders
 spam_lists/
 SpamPurge_Resources/
+
+
+# Ignore vim temp
+# .*.un~
+*.*~
+
+# ignore nano swap file
+.*.swp
