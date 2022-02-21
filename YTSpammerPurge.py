@@ -311,9 +311,6 @@ def main():
     CURRENTUSER = User(id=userInfo[0], name=userInfo[1], configMatch=userInfo[2]) # Returns [channelID, channelTitle, configmatch]
     auth.CURRENTUSER = CURRENTUSER
     print("\n    >  Currently logged in user: " + f"{F.LIGHTGREEN_EX}" + str(CURRENTUSER.name) + f"{S.R} (Channel ID: {F.LIGHTGREEN_EX}" + str(CURRENTUSER.id) + f"{S.R} )")
-    if has_yes_arg:
-      from time import sleep
-      sleep(2)
     if (has_yes_arg and yes_arg_str == str(CURRENTUSER.name)) or choice("       Continue as this user?", CURRENTUSER.configMatch) == True:
       confirmedCorrectLogin = True
       # os.system(clear_command)
